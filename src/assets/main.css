@@ -7,6 +7,13 @@
   font-style: normal;
 }
 
+@supports selector(:has(+ *)) {
+  label:has(+ input[required])::after {
+    content: " *";
+    color: red;
+  }
+}
+
 /* navbar */
 
 #brand-name {

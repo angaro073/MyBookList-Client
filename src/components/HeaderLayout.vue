@@ -3,13 +3,8 @@ import SearchBox from './SearchBox.vue';
 
 import { useAuthStore } from "@/stores/auth";
 import { RouterLink } from 'vue-router';
-// import { onMounted } from "vue";
 
 const authStore = useAuthStore();
-
-// onMounted(async () => {
-//   await authStore.getUser();
-// });
 </script>
 
 <template>
@@ -84,14 +79,14 @@ const authStore = useAuthStore();
                   <div class="me-2">
                     <router-link
                       :to="{name: 'login'}"
-                      class="btn btn-primary">
+                      class="btn bg-gradient">
                       Sign In
                     </router-link>
                   </div>
                   <div class="ms-2">
                     <router-link
                       :to="{name: 'register'}"
-                      class="btn btn-primary">
+                      class="btn bg-gradient">
                       Sign Up
                     </router-link>
                   </div>

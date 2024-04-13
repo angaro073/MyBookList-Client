@@ -1,7 +1,6 @@
 <script setup>
 import { ref } from "vue";
 import { RouterLink } from 'vue-router';
-
 import { useAuthStore } from "@/stores/auth";
 
 const authStore = useAuthStore();
@@ -12,19 +11,31 @@ const data = ref({
   remember: false
 });
 
-const validEmail =  /^\w+([.-_+]?\w+)*@\w+([.-]?\w+)*(\.\w{2,10})+$/;
-
 function checkForm() {
-  if (!validEmail.test(data.value.email)) authStore.errors.email = 'Email no valido';
-  if (!data.value.password) authStore.errors.password = 'Contraseña no valida';
+//
+console.log('Checking the form to login...')
 
-  if (!authStore.errors) authStore.handleLogin(data.value);
+//
+console.log(authStore.errors);
+//
+
+  authStore.handleLogin(data.value);
 }
 </script>
 
 <template>
   <main class="w-100 p-4 d-flex justify-content-center">
     <form @submit.prevent="checkForm">
+      <div
+        v-if="authStore.alerts"
+        class="alert"
+        :class="{
+          'alert-success': authStore.status >= 200 && authStore.status < 299,
+          'alert-danger': authStore.status >= 400,
+        }"
+      >
+        {{ authStore.alerts }}
+      </div>
       <div class="form-outline mb-4">
         <label class="form-label" for="emailInput">Email address</label>
         <input
@@ -33,15 +44,16 @@ function checkForm() {
           v-model="data.email"
           class="form-control"
           :class="{
-            'is-invalid': authStore.errors.email,
+            'is-invalid': authStore.errors && authStore.errors.email,
           }"
           required
         />
-        <div v-if="authStore.errors.email" class="invalid-feedback">
-          {{ authStore.errors.email[0] }}
+        <div v-if="authStore.errors && authStore.errors.email" class="invalid-feedback">
+          <ul>
+            <li v-for="(error, index) in authStore.errors.email" :key="index">{{ error }}</li>
+          </ul>
         </div>
       </div>
-
 
       <div class="form-outline mb-4">
         <label class="form-label" for="passwordInput">Password</label>
@@ -51,12 +63,14 @@ function checkForm() {
           v-model="data.password"
           class="form-control"
           :class="{
-            'is-invalid': authStore.errors.password,
+            'is-invalid': authStore.errors && authStore.errors.password,
           }"
           required
         />
-        <div v-if="authStore.errors.password" class="invalid-feedback">
-          {{ authStore.errors.password[0] }}
+        <div v-if="authStore.errors && authStore.errors.password" class="invalid-feedback">
+          <ul>
+            <li v-for="(error, index) in authStore.errors.password" :key="index">{{ error }}</li>
+          </ul>
         </div>
       </div>
 
@@ -68,7 +82,7 @@ function checkForm() {
               id="rememberInput"
               v-model="data.remember"
               class="form-check-input"
-              checked
+              checked="true"
             />
             <label class="form-check-label" for="rememberInput">Remember me</label>
           </div>

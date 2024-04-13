@@ -12,26 +12,25 @@ const data = ref({
   password_confirmation: ''
 });
 
-// const termsServices = ref(false);
-
-// const validEmail =  /^\w+([.-_+]?\w+)*@\w+([.-]?\w+)*(\.\w{2,10})+$/;
-
 function checkForm() {
-
-console.log(data.value);
-
-// Validacion pre request
-
-authStore.handleRegister(data.value);
-
-//
+  authStore.handleRegister(data.value);
 }
 </script>
 
 <template>
 <main class="w-100 p-4 d-flex justify-content-center">
-    <form @submit.prevent="checkForm">
-      <div class="form-outline mb-4">
+  <form @submit.prevent="checkForm">
+    <div class="form-outline mb-4">
+      <div
+        v-if="authStore.alerts"
+        class="alert"
+        :class="{
+          'alert-success': authStore.status >= 200 && authStore.status < 299,
+          'alert-danger': authStore.status >= 400,
+        }"
+      >
+        {{ authStore.alerts }}
+      </div>
         <label class="form-label" for="nameInput">Name</label>
         <input
           type="text"
@@ -39,11 +38,11 @@ authStore.handleRegister(data.value);
           v-model="data.name"
           class="form-control"
           :class="{
-            'is-invalid': authStore.errors.name,
+            'is-invalid': authStore.errors && authStore.errors.name,
           }"
 
         />
-        <div v-if="authStore.errors.name" class="invalid-feedback">
+        <div v-if="authStore.errors && authStore.errors.name" class="invalid-feedback">
           {{ authStore.errors.name }}
         </div>
       </div>
@@ -56,11 +55,11 @@ authStore.handleRegister(data.value);
           v-model="data.email"
           class="form-control"
           :class="{
-            'is-invalid': authStore.errors.email,
+            'is-invalid': authStore.errors && authStore.errors.email,
           }"
 
         />
-        <div v-if="authStore.errors.email" class="invalid-feedback">
+        <div v-if="authStore.errors && authStore.errors.email" class="invalid-feedback">
           {{ authStore.errors.email }}
         </div>
       </div>
@@ -74,11 +73,11 @@ authStore.handleRegister(data.value);
           v-model="data.password"
           class="form-control"
           :class="{
-            'is-invalid': authStore.errors.password,
+            'is-invalid': authStore.errors && authStore.errors.password,
           }"
 
         />
-        <div v-if="authStore.errors.password" class="invalid-feedback">
+        <div v-if="authStore.errors && authStore.errors.password" class="invalid-feedback">
           {{ authStore.errors.password }}
         </div>
       </div>
@@ -91,7 +90,7 @@ authStore.handleRegister(data.value);
           v-model="data.password_confirmation"
           class="form-control"
           :class="{
-            'is-invalid': authStore.errors.password,
+            'is-invalid': authStore.errors && authStore.errors.password,
           }"
 
         />
