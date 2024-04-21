@@ -13,19 +13,27 @@ const props = defineProps([
   >
     <router-link
       :to="{name: 'book', params: {bookId: result.id}}"
-      class="card text-center w-100 galleryBox"
+      class="card text-center w-100 galleryBox stretched-link"
     >
-      <img
-        v-if="result.volumeInfo.imageLinks.smallThumbnail"
-        :src="result.volumeInfo.imageLinks.smallThumbnail"
-        class="lazy card-img-top img-fluid"
-      />
-      <img
+      <div
+        v-if="result.volumeInfo.imageLinks && result.volumeInfo.imageLinks.smallThumbnail"
+        class="order-0 order-md-1 p-2"
+      >
+        <img
+          :src="result.volumeInfo.imageLinks.smallThumbnail"
+          class="lazy card-img-top img-fluid"
+        />
+      </div>
+      <div
         v-else
-        src="@/assets/icons/book-icon.svg"
-        :alt="index"
-        class="lazy card-img-top img-fluid"
-      />
+        class="order-0 order-md-1 p-2"
+      >
+        <img
+          src="@/assets/icons/book-icon.svg"
+          :alt="index"
+          class="lazy card-img-top img-fluid"
+        />
+      </div>
       <div class="card-body d-flex flex-column">
         <h2 class="card-title h3">{{ result.volumeInfo.title }}</h2>
         <p class="card-text">{{ result.volumeInfo.publishedDate }}</p>

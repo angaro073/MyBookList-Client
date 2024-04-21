@@ -1,3 +1,3 @@
 <template>
-  <h1>Este es HomeView</h1>
+  <h1>Welcome to MyBookList</h1>
 </template>

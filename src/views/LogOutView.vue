@@ -7,7 +7,7 @@ authStore.handleLogout();
 </script>
 
 <template>
-  <h1>Este es logout</h1>
+  <h1>Logout...</h1>
   <div
         v-if="authStore.alerts"
         class="alert"

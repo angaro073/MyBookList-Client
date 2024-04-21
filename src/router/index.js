@@ -1,5 +1,19 @@
 import { createRouter, createWebHistory } from 'vue-router';
+
 import HomeView from '../views/HomeView.vue';
+
+import LogInView from '@/views/LogInView.vue';
+import LogOutView from '@/views/LogOutView.vue';
+import RegisterView from '@/views/RegisterView.vue';
+import ProfileView from '@/views/ProfileView.vue';
+
+import LibraryView from '@/views/LibraryView.vue';
+import BookView from '@/views/BookView.vue';
+
+import AboutView from '@/views/AboutView.vue';
+import HelpView from '@/views/HelpView.vue';
+import PrivacyPolicyView from '@/views/PrivacyPolicyView.vue';
+import LegalConditionsView from '@/views/LegalConditionsView.vue';
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -12,65 +26,52 @@ const router = createRouter({
     {
       path: '/login',
       name: 'login',
-      component: () => import('@/views/LogInView.vue')
+      component: LogInView
     },
     {
       path: '/logout',
       name: 'logout',
-      component: () => import('@/views/LogOutView.vue')
+      component: LogOutView
     },
     {
       path: '/register',
       name: 'register',
-      component: () => import('@/views/RegisterView.vue')
+      component: RegisterView
     },
     {
       path: '/profile',
       name: 'profile',
-      component: () => import('@/views/ProfileView.vue')
-    },
-    {
-      path: '/settings',
-      name: 'settings',
-      component: () => import('@/views/SettingsView.vue')
+      component: ProfileView
     },
     {
       path: '/library',
       name: 'library',
-      component: () => import('@/views/LibraryView.vue')
+      component: LibraryView
     },
     {
       path: '/library/:bookId',
       name: 'book',
-      component: () => import('@/views/BookView.vue')
+      component: BookView
     },
     {
       path: '/about',
       name: 'about',
-      // route level code-splitting
-      // this generates a separate chunk (About.[hash].js) for this route
-      // which is lazy-loaded when the route is visited.
-      component: () => import('@/views/AboutView.vue')
+      component: AboutView
     },
     {
       path: '/help',
       name: 'help',
-      component: () => import('@/views/HelpView.vue')
+      component: HelpView
     },
     {
       path: '/privacy-policy',
       name: 'privacy-policy',
-      component: () => import('@/views/PrivacyPolicyView.vue')
+      component: PrivacyPolicyView
     },
     {
       path: '/legal-conditions',
       name: 'legal-conditions',
-      component: () => import('@/views/LegalConditionsView.vue')
-    },
-    {
-      path: '/forgot-password',
-      name: 'forgot-password',
-      component: () => import('@/views/ForgotPasswordView.vue')
+      component: LegalConditionsView
     }
   ], 
   sensitive: true,

@@ -5,6 +5,8 @@ import { useAuthStore } from "@/stores/auth";
 
 const authStore = useAuthStore();
 
+authStore.clear();
+
 const data = ref({
   email: '',
   password: '',
@@ -14,8 +16,6 @@ const data = ref({
 function checkForm() {
 //
 console.log('Checking the form to login...')
-
-//
 console.log(authStore.errors);
 //
 
@@ -37,21 +37,20 @@ console.log(authStore.errors);
         {{ authStore.alerts }}
       </div>
       <div class="form-outline mb-4">
-        <label class="form-label" for="emailInput">Email address</label>
+        <label class="form-label" for="emailInput">Email</label>
         <input
           type="email"
           id="emailInput"
           v-model="data.email"
           class="form-control"
           :class="{
-            'is-invalid': authStore.errors && authStore.errors.email,
+            'is-invalid': (authStore.errors && authStore.errors.email) || authStore.status >= 400,
           }"
+          :disabled="authStore.inProcess"
           required
         />
         <div v-if="authStore.errors && authStore.errors.email" class="invalid-feedback">
-          <ul>
-            <li v-for="(error, index) in authStore.errors.email" :key="index">{{ error }}</li>
-          </ul>
+          {{ authStore.errors.email }}
         </div>
       </div>
 
@@ -63,37 +62,38 @@ console.log(authStore.errors);
           v-model="data.password"
           class="form-control"
           :class="{
-            'is-invalid': authStore.errors && authStore.errors.password,
+            'is-invalid': (authStore.errors && authStore.errors.password) || authStore.status >= 400,
           }"
+          :disabled="authStore.inProcess"
           required
         />
         <div v-if="authStore.errors && authStore.errors.password" class="invalid-feedback">
-          <ul>
-            <li v-for="(error, index) in authStore.errors.password" :key="index">{{ error }}</li>
-          </ul>
+          {{ authStore.errors.password }}
         </div>
       </div>
 
-      <div class="row mb-4">
-        <div class="col d-flex justify-content-center">
+      <div class="d-flex justify-content-start mb-4">
+        <div class="d-flex justify-content-center">
           <div class="form-check">
             <input
               type="checkbox"
               id="rememberInput"
               v-model="data.remember"
               class="form-check-input"
+              :disabled="authStore.inProcess"
               checked="true"
             />
             <label class="form-check-label" for="rememberInput">Remember me</label>
           </div>
         </div>
-        <div class="col">
-          <router-link :to="{name: 'forgot-password'}">Forgot password?</router-link>
-        </div>
       </div>
 
       <div class="row">
-        <button type="submit" class="btn btn-primary">Sign in</button>
+        <button v-if="authStore.inProcess" class="btn btn-primary" type="button" disabled>
+          <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+          Loading...
+        </button>
+        <button v-else type="submit" class="btn btn-primary">Log In</button>
       </div>
 
       <div class="row text-center text-muted mt-5 mb-0">

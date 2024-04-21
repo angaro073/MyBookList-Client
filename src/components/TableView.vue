@@ -8,7 +8,7 @@ const props = defineProps([
 
 <template>
   <div class="table-responsive">
-    <table class="table table-bordered">
+    <table class="table table-hover">
       <thead class="thead-dark">
         <tr>
           <th scope="col">Title</th>
@@ -23,7 +23,7 @@ const props = defineProps([
           <td scope="row">
             <router-link
               :to="{name: 'book', params: {bookId: result.id}}"
-              class="text-decoration-none text-reset"
+              class="text-reset"
             >
               {{ result.volumeInfo.title }}
             </router-link>

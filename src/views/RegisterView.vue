@@ -5,6 +5,8 @@ import { RouterLink } from 'vue-router';
 
 const authStore = useAuthStore();
 
+authStore.clear();
+
 const data = ref({
   name: '',
   email: '',
@@ -40,7 +42,8 @@ function checkForm() {
           :class="{
             'is-invalid': authStore.errors && authStore.errors.name,
           }"
-
+          :disabled="authStore.inProcess"
+          required
         />
         <div v-if="authStore.errors && authStore.errors.name" class="invalid-feedback">
           {{ authStore.errors.name }}
@@ -48,16 +51,17 @@ function checkForm() {
       </div>
 
       <div class="form-outline mb-4">
-        <label class="form-label" for="emailInput">Email address</label>
+        <label class="form-label" for="emailInput">Email</label>
         <input
-          type="text"
+          type="email"
           id="emailInput"
           v-model="data.email"
           class="form-control"
           :class="{
             'is-invalid': authStore.errors && authStore.errors.email,
           }"
-
+          :disabled="authStore.inProcess"
+          required
         />
         <div v-if="authStore.errors && authStore.errors.email" class="invalid-feedback">
           {{ authStore.errors.email }}
@@ -75,7 +79,8 @@ function checkForm() {
           :class="{
             'is-invalid': authStore.errors && authStore.errors.password,
           }"
-
+          :disabled="authStore.inProcess"
+          required
         />
         <div v-if="authStore.errors && authStore.errors.password" class="invalid-feedback">
           {{ authStore.errors.password }}
@@ -92,7 +97,8 @@ function checkForm() {
           :class="{
             'is-invalid': authStore.errors && authStore.errors.password,
           }"
-
+          :disabled="authStore.inProcess"
+          required
         />
       </div>
 
@@ -116,13 +122,17 @@ function checkForm() {
       </div> -->
 
       <div class="row">
-        <button type="submit" class="btn btn-primary">Sign Up</button>
+        <button v-if="authStore.inProcess" class="btn btn-primary" type="button" disabled>
+          <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+          Loading...
+        </button>
+        <button v-else type="submit" class="btn btn-primary">Sign Up</button>
       </div>
 
       <p class="text-center text-muted mt-5 mb-0">
         Have already an account?
         <router-link :to="{name: 'login'}" class="fw-bold text-body">
-          <u>Login here</u>
+          <u>Log In here</u>
         </router-link>
       </p>
     </form>

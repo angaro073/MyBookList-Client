@@ -8,12 +8,14 @@ export const useAuthStore = defineStore("auth", {
     authErrors: {},
     authAlerts: null,
     authStatus: null,
+    inAuthProcess: false
   }),
   getters: {
     user: (state) => state.authUser,
     errors: (state) => state.authErrors,
     alerts: (state) => state.authAlerts,
     status: (state) => state.authStatus,
+    inProcess: (state) => state.inAuthProcess
   },
   actions: {
     getCookie(cname) {
@@ -50,136 +52,213 @@ export const useAuthStore = defineStore("auth", {
     // async getToken() {
     //   await axios.get("/sanctum/csrf-cookie");
     // },
-//     async getUser() {
-// await this.getToken();
-//       const data = await axios.get("/api/user");
-//       this.authUser = data.data;
-//     },
-    async handleLogin(data) {
+    getUser() {
+      let sessionToken = sessionStorage.getItem('sessionToken');
+      if (sessionToken) {
+        this.inAuthProcess = true;
+//
+console.log('Getting user...');
+//
+        let options = {
+          headers: {
+            Authorization: `Bearer ${sessionToken}`
+          }
+        }
+        axios.get("/user", options)
+        .then(
+          (response) => {
+            this.inAuthProcess = false;
+            this.authUser = response.data.user;
+          },
+          (error) => {
+            this.inAuthProcess = false;
+            console.log(error);
+          }
+        );
+      } else {
+        let rememberToken = this.getCookie('rememberToken');
+        if (rememberToken) {
+          this.inAuthProcess = true;
+//
+console.log('Remembering session...');
+//
+          let options = {
+            headers: {
+              Authorization: `Bearer ${rememberToken}`
+            }
+          }
+          axios.get("/remember", options)
+          .then(
+            (response) => {
+              this.inAuthProcess = false;
+              sessionStorage.setItem('sessionToken', response.data.sessionToken);
+              this.getUser();
+            },
+            (error) => {
+              this.inAuthProcess = false;
+              console.log(error);
+            }
+          );
+        }
+      }
+    },
+    handleLogin(data) {
       this.clear();
 //
 console.log('Login...');
 //
-      try {
-        const response = await axios.post("/login", {
-          email: data.email,
-          password: data.password
-        });
+      this.inAuthProcess = true;
+
+      axios.post("/login", {
+        email: data.email,
+        password: data.password,
+        remember: data.remember
+      })
+      .then(
+        (response) => {
+          this.inAuthProcess = false;
 //
 console.log(response);
 //
-        this.authStatus = response.status;
+          this.authStatus = response.status;
 //
 console.log(this.authStatus);
 //
-        this.authUser = response.data.user;
-        sessionStorage.setItem('session_token', response.data.session_token);
-        if (data.remember) this.setCookie('remember_token', response.data.remember_token, 30);
-      } catch (error) {
+console.log(response.data.rememberToken);
+
+          sessionStorage.setItem('sessionToken', response.data.sessionToken);
+          if (data.remember) this.setCookie('rememberToken', response.data.rememberToken, 30);
+          
+          this.getUser();
+        },
+        (error) => {
+          this.inAuthProcess = false;
 //
 console.log(error);
 //
-        this.authStatus = error.response.status;
-        if (error.response.status == 401) {
-          this.authAlerts = error.response.data.message;
-        } else {
-          this.authErrors = error.response.data.errors;
+            if (error.response) {
+//
+console.log('Client error...');
+//
+              this.authStatus = error.response.status;
+              if (error.response.status == 422) {
+                this.authAlerts = error.response.data.errors.user;
+              } else if (error.response.status == 403) {
+                this.authAlerts = error.response.data.errors.email;
+              } else {
+                this.authErrors = error.response.data.errors;
+              }
+            } else {
+//
+console.log('Network error...');
+//
+              this.authStatus = 503;
+              this.authAlerts = 'Connection refused';
+            }
         }
-//
-console.log(this.status);
-console.log(this.alerts);
-console.log(this.errors);
-//
-      }
+      );
     },
-    async handleRegister(data) {
+    handleRegister(data) {
+      this.clear();
 //
 console.log('Registring...');
 //
-      this.clear();
-      try {
-        const response = await axios.post("/register", {
-          name: data.name,
-          email: data.email,
-          password: data.password,
-        });
+      this.inAuthProcess = true;
+
+      axios.post("/register", {
+        name: data.name,
+        email: data.email,
+        password: data.password,
+        password_confirmation: data.password_confirmation
+      })
+      .then(
+        (response) => {
+          this.inAuthProcess = false;
 //
 console.log(response);
 //
-        this.authAlerts = response.data.message;
-        this.authStatus = response.status;
+          this.authAlerts = response.data.message;
+          this.authStatus = response.status;
 //
 console.log(this.alerts);
 console.log(this.status);
 //
-      } catch (error) {
+        },
+        (error) => {
 //
 console.log(error);
 //
-        this.authStatus = error.response.status;
-        this.authErrors = error.response.data.errors;
+          this.inAuthProcess = false;
+
+          if (error.response) {
 //
-console.log(this.status);
-console.log(this.errors);
+console.log('Client error...');
 //
-      }
+            this.authStatus = error.response.status;
+            this.authErrors = error.response.data.errors;
+//
+console.log(this.authErrors);
+//
+          } else {
+//
+console.log('Network error...');
+//
+            this.authStatus = 503;
+            this.authAlerts = 'Connection refused';
+          }
+        }
+      );
     },
     async handleLogout() {
 //
 console.log('Logout...');
 //
       this.clear();
-      let token = sessionStorage.getItem('session_token');
-      if (token) {
-        try{
-          let options = {
-            headers: {
-              Authorization: `Bearer ${token}`
-            }
+      let sessionToken = sessionStorage.getItem('sessionToken');
+      if (sessionToken) {
+        this.inAuthProcess = true;
+
+        let options = {
+          headers: {
+            Authorization: `Bearer ${sessionToken}`
           }
-          const response = await axios.post("/logout", null, options);
+        }
+        axios.post("/logout", null, options)
+        .then(
+          (response) => {
 //
 console.log(response);
 //
-          this.authStatus = response.status;
-          this.authAlerts = response.data.message;
-          
-          this.authUser = null;
-          sessionStorage.removeItem('session_token');
-          this.removeCookie('remember_token');
-        } catch(error) {
+            this.inAuthProcess = false;
+            this.authStatus = response.status;
+            this.authAlerts = response.data.message;
+            
+            sessionStorage.removeItem('sessionToken');
+            this.removeCookie('rememberToken');
+            this.authUser = null;
+          },
+          (error) => {
 //
 console.log(error);
 //
-          this.authStatus = error.response.status;
-          this.authAlerts = error.response.data.message;
-        }
+            this.inAuthProcess = false;
+
+            if (error.response) {
+//
+console.log('Client error...');
+//
+              this.authStatus = error.response.status;
+              this.authAlerts = error.response.data.message;
+            } else {
+//
+console.log('Network error...');
+//
+              this.authStatus = 503;
+              this.authAlerts = 'Connection refused';
+            }
+          }
+        );
       }
     },
-//     async handleForgotPassword(email) {
-//       this.authErrors = [];
-//  this.getToken();
-//       try {
-//         const response = await axios.post("/forgot-password", {
-//           email: email,
-//         });
-//         this.authStatus = response.data.status;
-//       } catch (error) {
-//         if (error.response.status === 422) {
-//           this.authErrors = error.response.data.errors;
-//         }
-//       }
-//     },
-    // async handleResetPassword(resetData) {
-    //   this.authErrors = [];
-    //   try {
-    //     const response = await axios.post("/reset-password", resetData);
-    //     this.authStatus = response.data.status;
-    //   } catch (error) {
-    //     if (error.response.status === 422) {
-    //       this.authErrors = error.response.data.errors;
-    //     }
-    //   }
-    // },
   },
 });
