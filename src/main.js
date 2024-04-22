@@ -19,6 +19,12 @@ const app = createApp(App);
 app.use(pinia);
 app.use(router);
 
+app.config.globalProperties.$filters = {
+  dateShort(date) {
+    return new Date(date).toLocaleDateString();
+  }
+}
+
 app.mount('#app');
 
 import 'bootstrap/dist/js/bootstrap.js';
