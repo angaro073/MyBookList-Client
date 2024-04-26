@@ -77,6 +77,9 @@ console.log('Getting user...');
         );
       } else {
         let rememberToken = this.getCookie('rememberToken');
+//
+console.log(rememberToken);
+//
         if (rememberToken) {
           this.inAuthProcess = true;
 //

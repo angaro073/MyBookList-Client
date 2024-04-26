@@ -25,7 +25,7 @@ console.log('Clearing data...');
     save(data){
       let sessionToken = sessionStorage.getItem('sessionToken');
 
-      if (sessionToken && this.state && this.progress >= 0 && this.score >= 0) {
+      if (sessionToken) {
 //
 console.log(`sessionToken: ${sessionToken}`);
 console.log(data);
@@ -46,6 +46,12 @@ console.log('Saving collection data...');
         .then(
           (response) => {
             this.inCollectionProcess = false;
+
+            this.state = response.data.state;
+            this.progress = response.data.progress;
+            this.score = response.data.score;
+
+            this.processResults = response.data;
 //
 console.log(response);
 //
@@ -79,7 +85,7 @@ console.log('Deleting data...');
             Authorization: `Bearer ${sessionToken}`
           }
         }
-        axios.delete(`/collection/${userId}/${bookId}`, null, options)
+        axios.delete(`/collection/${userId}/${bookId}`, options)
         .then(
           (response) => {
 //
@@ -87,14 +93,11 @@ console.log(response);
 //
             this.inCollectionProcess = false;
             
-            this.state = response.data.state;
-            this.progress = response.data.progress;
-            this.score = response.data.score;
-
-            this.processResults = response.data;
+            this.clear();
           },
           (error) => {
             this.inCollectionProcess = false;
+            this.clear();
             console.log(error);
           }
         );
@@ -120,14 +123,14 @@ console.log('Getting collection registry...');
             Authorization: `Bearer ${sessionToken}`
           }
         }
-        axios.get(`/collection/${userId}/${bookId}`, null, options)
+        axios.get(`/collection/${userId}/${bookId}`, options)
         .then(
           (response) => {
 //
 console.log(response);
 //
             this.inCollectionProcess = false;
-            
+
             this.state = response.data.state;
             this.progress = response.data.progress;
             this.score = response.data.score;
@@ -136,6 +139,45 @@ console.log(response);
           },
           (error) => {
             this.inCollectionProcess = false;
+            this.clear();
+            console.log(error);
+          }
+        );
+      }
+    },
+    getByState(userId, state) {
+//
+console.log(`userId: ${userId}`);
+console.log(`state: ${state}`);
+//
+      let sessionToken = sessionStorage.getItem('sessionToken');
+//
+console.log(`sessionToken: ${sessionToken}`);
+//
+      if (sessionToken) {
+        this.inCollectionProcess = true;
+        this.processResults = null;
+//
+console.log(`Getting collection ${state}...`);
+//
+        let options = {
+          headers: {
+            Authorization: `Bearer ${sessionToken}`
+          }
+        }
+        axios.get(`/collection/${userId}?state=${state}`, options)
+        .then(
+          (response) => {
+//
+console.log(response);
+//
+            this.inCollectionProcess = false;
+
+            this.processResults = response.data;
+          },
+          (error) => {
+            this.inCollectionProcess = false;
+            this.processResults = null;
             console.log(error);
           }
         );

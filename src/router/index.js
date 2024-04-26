@@ -6,6 +6,7 @@ import LogInView from '@/views/LogInView.vue';
 import LogOutView from '@/views/LogOutView.vue';
 import RegisterView from '@/views/RegisterView.vue';
 import ProfileView from '@/views/ProfileView.vue';
+import CollectionView from '@/views/CollectionView.vue';
 
 import LibraryView from '@/views/LibraryView.vue';
 import BookView from '@/views/BookView.vue';
@@ -42,6 +43,18 @@ const router = createRouter({
       path: '/profile',
       name: 'profile',
       component: ProfileView
+    },
+    {
+      path: '/collection',
+      name: 'collection',
+      component: CollectionView,
+      // children: [
+      //   {
+      //     path: ':state',
+      //     name: 'collection-table',
+      //     component: CollectionTableView
+      //   }
+      // ]
     },
     {
       path: '/library',

@@ -1,6 +1,4 @@
 <script setup>
-import SearchBox from './SearchBox.vue';
-
 import { useAuthStore } from "@/stores/auth";
 import { RouterLink } from 'vue-router';
 
@@ -29,10 +27,11 @@ authStore.getUser();
         >
           <span class="navbar-toggler-icon"></span>
         </button>
+        
         <div
-          class="offcanvas offcanvas-end"
+          class="offcanvas offcanvas-end w-auto"
           data-bs-scroll="true"
-          data-bs-backdrop="false"
+          data-bs-backdrop="true"
           tabindex="-1"
           id="offcanvas"
           aria-labelledby="offcanvasLabel"
@@ -56,24 +55,10 @@ authStore.getUser();
               </li>
             </ul>
 
-            <hr class="d-lg-none">
+            <hr class="py-2 my-2">
 
+            <!-- avatar -->
             <ul class="navbar-nav flex-row flex-wrap ms-md-auto">
-              <li class="nav-item col-6 col-lg-auto">
-                <SearchBox></SearchBox>
-              </li>
-            </ul>
-
-            <hr class="d-lg-none">
-
-            <ul class="navbar-nav flex-row flex-wrap">
-              <!-- barra -->
-              <li class="nav-item py-2 my-auto py-lg-1 col-12 col-lg-auto">
-                <div class="vr d-none d-lg-flex h-100 mx-lg-2 text-white"></div>
-                <hr class="d-lg-none my-2">
-              </li>
-
-              <!-- avatar -->
               <li
                 v-if="!authStore.user"
                 class="nav-item mx-auto"
@@ -97,20 +82,23 @@ authStore.getUser();
               </li>
               <li
                 v-else
-                class="nav-item dropdown my-auto"
+                class="nav-item my-auto"
               >
-                <div class="dropdown">
-                  <a href="#" class="d-flex align-items-center link-dark text-decoration-none dropdown-toggle" id="dropdownUser" data-bs-toggle="dropdown" aria-expanded="false">
+                <div class="dropdown dropstart">
+                  <button class="btn dropdown-toggle" id="dropdownUser" data-bs-toggle="dropdown" aria-expanded="false" data-bs-reference="parent">
                     <img src="@/assets/icons/user-icon.svg" width="32" height="32" class="rounded-circle me-2">
                     <strong>{{ authStore.user.name }}</strong>
-                  </a>
-                  <ul class="dropdown-menu text-small shadow" aria-labelledby="dropdownUser">
+                  </button>
+                  <ul class="dropdown-menu text-small shadow w-auto text-center" aria-labelledby="dropdownUser">
                     <li>
-                      <router-link :to="{name: 'profile'}" class="dropdown-item">Profile</router-link>
+                      <router-link :to="{name: 'collection'}" class="dropdown-item" activeClass="active">Collections</router-link>
+                    </li>
+                    <li>
+                      <router-link :to="{name: 'profile'}" class="dropdown-item" activeClass="active">Profile</router-link>
                     </li>
                     <li><hr class="dropdown-divider"></li>
                     <li>
-                      <router-link :to="{name: 'logout'}" class="dropdown-item">Log out</router-link>
+                      <router-link :to="{name: 'logout'}" class="dropdown-item" activeClass="active">Log out</router-link>
                     </li>
                   </ul>
                 </div>

@@ -40,82 +40,85 @@ watch([
 
 <template>
   <div class="container">
-    <h2>Advanced search</h2>
-    <div class="input-group mb-4">
-      <input
-        type="text"
-        placeholder="Search..."
-        class="form-control"
-        v-model="libraryStore.qKey"
-      >
-      <div class="input-group-append">
-        <button 
-          type="button"
-          class="btn" 
-          @click="libraryStore.search()"
-          :disabled="!(libraryStore.q || libraryStore.author || libraryStore.publisher || libraryStore.category)"
+    <form>
+      <h2>Advanced search</h2>
+      <div class="input-group mb-4">
+        <input
+          type="text"
+          placeholder="Search..."
+          class="form-control"
+          autofocus
+          v-model="libraryStore.qKey"
         >
-          <img src="@/assets/icons/search-icon.svg" alt="Search">
-        </button>
-      </div>
-    </div>
-
-    <div class="accordion accordion-flush" id="extraFilters">
-      <div class="accordion-item">
-        <h2 class="accordion-header" id="extraFilters-header">
-          <button
-            type="button"
-            class="accordion-button"
-            data-bs-toggle="collapse"
-            data-bs-target="#extraFilters-body"
-            aria-expanded="false"
-            aria-controls="extraFilters-body"
+        <div class="input-group-append">
+          <button 
+            type="submit"
+            class="btn" 
+            @click="libraryStore.search()"
+            :disabled="!(libraryStore.q || libraryStore.author || libraryStore.publisher || libraryStore.category)"
           >
-            Filters
+            <img src="@/assets/icons/search-icon.svg" alt="Search">
           </button>
-        </h2>
-        <div id="extraFilters-body" class="accordion-collapse collapse" aria-labelledby="extraFilters-header" data-bs-parent="#extraFilters">
-          <div class="accordion-body">
-            <div class="form-group">
-              <label for="authorFilter">Author</label>
-              <input
-                id="authorFilter"
-                type="text"
-                class="form-control"
-                v-model="libraryStore.authorKey"
-              >
-            </div>
-            <div class="form-group">
-              <label for="publisherFilter">Publisher</label>
-              <input
-                type="text"
-                id="publisherFilter"
-                class="form-control"
-                v-model="libraryStore.publisherKey"
-              >
-            </div>
-            <div class="form-group">
-              <label for="categoryFilter">Category</label>
-              <input
-                type="text"
-                id="categoryFilter"
-                class="form-control"
-                v-model="libraryStore.categoryKey"
-              >
+        </div>
+      </div>
+  
+      <div class="accordion accordion-flush" id="extraFilters">
+        <div class="accordion-item">
+          <h2 class="accordion-header" id="extraFilters-header">
+            <button
+              type="button"
+              class="accordion-button"
+              data-bs-toggle="collapse"
+              data-bs-target="#extraFilters-body"
+              aria-expanded="false"
+              aria-controls="extraFilters-body"
+            >
+              Filters
+            </button>
+          </h2>
+          <div id="extraFilters-body" class="accordion-collapse collapse" aria-labelledby="extraFilters-header" data-bs-parent="#extraFilters">
+            <div class="accordion-body">
+              <div class="form-group">
+                <label for="authorFilter">Author</label>
+                <input
+                  id="authorFilter"
+                  type="text"
+                  class="form-control"
+                  v-model="libraryStore.authorKey"
+                >
+              </div>
+              <div class="form-group">
+                <label for="publisherFilter">Publisher</label>
+                <input
+                  type="text"
+                  id="publisherFilter"
+                  class="form-control"
+                  v-model="libraryStore.publisherKey"
+                >
+              </div>
+              <div class="form-group">
+                <label for="categoryFilter">Category</label>
+                <input
+                  type="text"
+                  id="categoryFilter"
+                  class="form-control"
+                  v-model="libraryStore.categoryKey"
+                >
+              </div>
             </div>
           </div>
         </div>
       </div>
-    </div>
+    </form>
 
     <!-- Results Options -->
     <SpinnerBorder v-if="libraryStore.inSearch" />
     <div v-else>
       <div v-if="libraryStore.results && libraryStore.results.items">
         <div class="row my-3 align-items-center">
-          <div class="col-auto d-none d-md-block">{{ libraryStore.results.totalItems }} results</div>
+          <div class="col-auto d-inline">{{ libraryStore.results.totalItems }} results</div>
           <div class="col-auto ms-auto">
-            <div>
+
               <router-link
                 :to="{name: 'library', query: {...$route.query, mode: 'list'}}"
                 role="button"
@@ -123,7 +126,7 @@ watch([
                 :disabled="!viewMode || viewMode == 'list'"
               >
                 <!-- <img href="@/assets/icons/table-icon.svg" class="fonticon-table" /> -->
-                <span class="d-none d-md-inline">&nbsp;List</span>
+                <span class="d-inline">&nbsp;List</span>
               </router-link>
               <router-link
                 :to="{name: 'library', query: {...$route.query, mode: 'card'}}"
@@ -132,9 +135,9 @@ watch([
                 :disabled="viewMode == 'card'"
               >
                 <!-- <img href="@/assets/icons/grid-icon.svg" class="fonticon-table" /> -->
-                <span class="d-none d-md-inline">&nbsp;Grid</span>
+                <span class="d-inline">&nbsp;Grid</span>
               </router-link>
-            </div>
+
           </div>
         </div>
         <!-- results Views -->

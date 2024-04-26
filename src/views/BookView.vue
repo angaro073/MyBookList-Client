@@ -20,9 +20,9 @@ onMounted(() => {
 });
 
 function updateModal() {
-console.log('Update...')
   if (bookId.value && authStore.user.id) {
 //
+console.log('Update...')
 console.log(authStore.user);
 //
     collectionStore.get(authStore.user.id, bookId.value);
@@ -36,14 +36,15 @@ function saveData() {
     && (libraryStore.results && libraryStore.results.volumeInfo)
     && libraryStore.results.volumeInfo.title
     && libraryStore.results.volumeInfo.pageCount
+    && libraryStore.results.volumeInfo.publishedDate
   ){
     collectionStore.save({
       "user_id": authStore.user.id,
       "book_id": bookId.value,
       "title": libraryStore.results.volumeInfo.title,
-      "pageCount": libraryStore.results.volumeInfo.pageCount
+      "pageCount": libraryStore.results.volumeInfo.pageCount,
+      "publishedDate": libraryStore.results.volumeInfo.publishedDate,
     });
-    // updateModal();
   }
 }
 
@@ -75,7 +76,7 @@ function deleteData() {
           @click="updateModal"
         >+</button>
 
-        <div class="modal fade" id="feedbackForm" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="feedbackFormLabel" aria-hidden="true">
+        <div class="modal fade" id="feedbackForm" data-bs-backdrop="false" data-bs-keyboard="true" tabindex="-1" aria-labelledby="feedbackFormLabel" aria-hidden="true">
           <div class="modal-dialog modal-fullscreen modal-dialog-centered">
             <div class="modal-content">
               <div class="modal-header">
