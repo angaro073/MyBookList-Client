@@ -177,7 +177,6 @@ console.log(response);
           },
           (error) => {
             this.inCollectionProcess = false;
-            this.processResults = null;
             console.log(error);
           }
         );
