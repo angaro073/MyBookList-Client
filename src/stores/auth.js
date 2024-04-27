@@ -1,8 +1,8 @@
-import { defineStore } from "pinia";
-import axios from "axios";
+import { defineStore } from 'pinia';
+import axios from 'axios';
 // import { useRouter } from 'vue-router'
 
-export const useAuthStore = defineStore("auth", {
+export const useAuthStore = defineStore('auth', {
   state: () => ({
     authUser: null,
     authErrors: {},
@@ -19,9 +19,9 @@ export const useAuthStore = defineStore("auth", {
   },
   actions: {
     getCookie(cname) {
-      let name = cname + "=";
+      let name = cname + '=';
       let ca = document.cookie.split(';');
-      for(let i = 0; i < ca.length; i++) {
+      for (let i = 0; i < ca.length; i++) {
         let c = ca[i];
         while (c.charAt(0) == ' ') {
           c = c.substring(1);
@@ -30,21 +30,21 @@ export const useAuthStore = defineStore("auth", {
           return c.substring(name.length, c.length);
         }
       }
-      return "";
+      return '';
     },
     setCookie(cname, cvalue, exdays) {
       const d = new Date();
-      d.setTime(d.getTime() + (exdays * 24 * 60 * 60 * 1000));
-      let expires = "expires="+d.toUTCString();
-      document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
+      d.setTime(d.getTime() + exdays * 24 * 60 * 60 * 1000);
+      let expires = 'expires=' + d.toUTCString();
+      document.cookie = cname + '=' + cvalue + ';' + expires + ';path=/';
     },
     removeCookie(cname) {
       const d = new Date();
-      d.setTime(d.getTime() + (-1));
-      let expires = "expires="+d.toUTCString();
-      document.cookie = cname + "='';" + expires + ";path=/";
+      d.setTime(d.getTime() + -1);
+      let expires = 'expires=' + d.toUTCString();
+      document.cookie = cname + "='';" + expires + ';path=/';
     },
-    clear(){
+    clear() {
       this.authStatus = null;
       this.authAlerts = null;
       this.authErrors = {};
@@ -56,16 +56,15 @@ export const useAuthStore = defineStore("auth", {
       let sessionToken = sessionStorage.getItem('sessionToken');
       if (sessionToken) {
         this.inAuthProcess = true;
-//
-console.log('Getting user...');
-//
+        //
+        console.log('Getting user...');
+        //
         let options = {
           headers: {
             Authorization: `Bearer ${sessionToken}`
           }
-        }
-        axios.get("/user", options)
-        .then(
+        };
+        axios.get('/user', options).then(
           (response) => {
             this.inAuthProcess = false;
             this.authUser = response.data.user;
@@ -77,21 +76,20 @@ console.log('Getting user...');
         );
       } else {
         let rememberToken = this.getCookie('rememberToken');
-//
-console.log(rememberToken);
-//
+        //
+        console.log(rememberToken);
+        //
         if (rememberToken) {
           this.inAuthProcess = true;
-//
-console.log('Remembering session...');
-//
+          //
+          console.log('Remembering session...');
+          //
           let options = {
             headers: {
               Authorization: `Bearer ${rememberToken}`
             }
-          }
-          axios.get("/remember", options)
-          .then(
+          };
+          axios.get('/remember', options).then(
             (response) => {
               this.inAuthProcess = false;
               sessionStorage.setItem('sessionToken', response.data.sessionToken);
@@ -107,42 +105,43 @@ console.log('Remembering session...');
     },
     handleLogin(data) {
       this.clear();
-//
-console.log('Login...');
-//
+      //
+      console.log('Login...');
+      //
       this.inAuthProcess = true;
 
-      axios.post("/login", {
-        email: data.email,
-        password: data.password,
-        remember: data.remember
-      })
-      .then(
-        (response) => {
-          this.inAuthProcess = false;
-//
-console.log(response);
-//
-          this.authStatus = response.status;
-//
-console.log(this.authStatus);
-//
-console.log(response.data.rememberToken);
+      axios
+        .post('/login', {
+          email: data.email,
+          password: data.password,
+          remember: data.remember
+        })
+        .then(
+          (response) => {
+            this.inAuthProcess = false;
+            //
+            console.log(response);
+            //
+            this.authStatus = response.status;
+            //
+            console.log(this.authStatus);
+            //
+            console.log(response.data.rememberToken);
 
-          sessionStorage.setItem('sessionToken', response.data.sessionToken);
-          if (data.remember) this.setCookie('rememberToken', response.data.rememberToken, 30);
-          
-          this.getUser();
-        },
-        (error) => {
-          this.inAuthProcess = false;
-//
-console.log(error);
-//
+            sessionStorage.setItem('sessionToken', response.data.sessionToken);
+            if (data.remember) this.setCookie('rememberToken', response.data.rememberToken, 30);
+
+            this.getUser();
+          },
+          (error) => {
+            this.inAuthProcess = false;
+            //
+            console.log(error);
+            //
             if (error.response) {
-//
-console.log('Client error...');
-//
+              //
+              console.log('Client error...');
+              //
               this.authStatus = error.response.status;
               if (error.response.status == 422) {
                 this.authAlerts = error.response.data.errors.user;
@@ -152,70 +151,71 @@ console.log('Client error...');
                 this.authErrors = error.response.data.errors;
               }
             } else {
-//
-console.log('Network error...');
-//
+              //
+              console.log('Network error...');
+              //
               this.authStatus = 503;
               this.authAlerts = 'Connection refused';
             }
-        }
-      );
+          }
+        );
     },
     handleRegister(data) {
       this.clear();
-//
-console.log('Registring...');
-//
+      //
+      console.log('Registring...');
+      //
       this.inAuthProcess = true;
 
-      axios.post("/register", {
-        name: data.name,
-        email: data.email,
-        password: data.password,
-        password_confirmation: data.password_confirmation
-      })
-      .then(
-        (response) => {
-          this.inAuthProcess = false;
-//
-console.log(response);
-//
-          this.authAlerts = response.data.message;
-          this.authStatus = response.status;
-//
-console.log(this.alerts);
-console.log(this.status);
-//
-        },
-        (error) => {
-//
-console.log(error);
-//
-          this.inAuthProcess = false;
+      axios
+        .post('/register', {
+          name: data.name,
+          email: data.email,
+          password: data.password,
+          password_confirmation: data.password_confirmation
+        })
+        .then(
+          (response) => {
+            this.inAuthProcess = false;
+            //
+            console.log(response);
+            //
+            this.authAlerts = response.data.message;
+            this.authStatus = response.status;
+            //
+            console.log(this.alerts);
+            console.log(this.status);
+            //
+          },
+          (error) => {
+            //
+            console.log(error);
+            //
+            this.inAuthProcess = false;
 
-          if (error.response) {
-//
-console.log('Client error...');
-//
-            this.authStatus = error.response.status;
-            this.authErrors = error.response.data.errors;
-//
-console.log(this.authErrors);
-//
-          } else {
-//
-console.log('Network error...');
-//
-            this.authStatus = 503;
-            this.authAlerts = 'Connection refused';
+            if (error.response) {
+              //
+              console.log('Client error...');
+              //
+              this.authStatus = error.response.status;
+              this.authErrors = error.response.data.errors;
+              //
+              console.log(this.authErrors);
+              //
+            } else {
+              //
+              console.log('Network error...');
+              //
+              this.authStatus = 503;
+              this.authAlerts = 'Connection refused';
+            }
           }
-        }
-      );
+        );
     },
     async handleLogout() {
-//
-console.log('Logout...');
-//
+      //
+      console.log('Logout...');
+      //
       this.clear();
       let sessionToken = sessionStorage.getItem('sessionToken');
       if (sessionToken) {
@@ -225,43 +225,42 @@ console.log('Logout...');
           headers: {
             Authorization: `Bearer ${sessionToken}`
           }
-        }
-        axios.post("/logout", null, options)
-        .then(
+        };
+        axios.post('/logout', null, options).then(
           (response) => {
-//
-console.log(response);
-//
+            //
+            console.log(response);
+            //
             this.inAuthProcess = false;
             this.authStatus = response.status;
             this.authAlerts = response.data.message;
-            
+
             sessionStorage.removeItem('sessionToken');
             this.removeCookie('rememberToken');
             this.authUser = null;
           },
           (error) => {
-//
-console.log(error);
-//
+            //
+            console.log(error);
+            //
             this.inAuthProcess = false;
 
             if (error.response) {
-//
-console.log('Client error...');
-//
+              //
+              console.log('Client error...');
+              //
               this.authStatus = error.response.status;
               this.authAlerts = error.response.data.message;
             } else {
-//
-console.log('Network error...');
-//
+              //
+              console.log('Network error...');
+              //
               this.authStatus = 503;
               this.authAlerts = 'Connection refused';
             }
           }
         );
       }
-    },
-  },
+    }
+  }
 });
