@@ -47,7 +47,7 @@ const router = createRouter({
     {
       path: '/collection',
       name: 'collection',
-      component: CollectionView,
+      component: CollectionView
       // children: [
       //   {
       //     path: ':state',
@@ -86,9 +86,9 @@ const router = createRouter({
       name: 'legal-conditions',
       component: LegalConditionsView
     }
-  ], 
+  ],
   sensitive: true,
-  strict: true,
-})
+  strict: true
+});
 
 export default router;

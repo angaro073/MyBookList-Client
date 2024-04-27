@@ -1,6 +1,6 @@
 <script setup>
-import { useAuthStore } from "@/stores/auth.js";
-import { ref } from "vue";
+import { useAuthStore } from '@/stores/auth.js';
+import { ref } from 'vue';
 import { RouterLink } from 'vue-router';
 
 const authStore = useAuthStore();
@@ -20,19 +20,19 @@ function checkForm() {
 </script>
 
 <template>
-<main class="w-100 p-4 d-flex justify-content-center">
-  <form @submit.prevent="checkForm">
-    <div class="form-outline mb-4">
-      <div
-        v-if="authStore.alerts"
-        class="alert"
-        :class="{
-          'alert-success': authStore.status >= 200 && authStore.status < 299,
-          'alert-danger': authStore.status >= 400,
-        }"
-      >
-        {{ authStore.alerts }}
-      </div>
+  <main class="w-100 p-4 d-flex justify-content-center">
+    <form @submit.prevent="checkForm">
+      <div class="form-outline mb-4">
+        <div
+          v-if="authStore.alerts"
+          class="alert"
+          :class="{
+            'alert-success': authStore.status >= 200 && authStore.status < 299,
+            'alert-danger': authStore.status >= 400
+          }"
+        >
+          {{ authStore.alerts }}
+        </div>
         <label class="form-label" for="nameInput">Name</label>
         <input
           type="text"
@@ -40,7 +40,7 @@ function checkForm() {
           v-model="data.name"
           class="form-control"
           :class="{
-            'is-invalid': authStore.errors && authStore.errors.name,
+            'is-invalid': authStore.errors && authStore.errors.name
           }"
           :disabled="authStore.inProcess"
           required
@@ -58,7 +58,7 @@ function checkForm() {
           v-model="data.email"
           class="form-control"
           :class="{
-            'is-invalid': authStore.errors && authStore.errors.email,
+            'is-invalid': authStore.errors && authStore.errors.email
           }"
           :disabled="authStore.inProcess"
           required
@@ -68,7 +68,6 @@ function checkForm() {
         </div>
       </div>
 
-
       <div class="form-outline mb-4">
         <label class="form-label" for="passwordInput1">Password</label>
         <input
@@ -77,7 +76,7 @@ function checkForm() {
           v-model="data.password"
           class="form-control"
           :class="{
-            'is-invalid': authStore.errors && authStore.errors.password,
+            'is-invalid': authStore.errors && authStore.errors.password
           }"
           :disabled="authStore.inProcess"
           required
@@ -95,7 +94,7 @@ function checkForm() {
           v-model="data.password_confirmation"
           class="form-control"
           :class="{
-            'is-invalid': authStore.errors && authStore.errors.password,
+            'is-invalid': authStore.errors && authStore.errors.password
           }"
           :disabled="authStore.inProcess"
           required
@@ -131,7 +130,7 @@ function checkForm() {
 
       <p class="text-center text-muted mt-5 mb-0">
         Have already an account?
-        <router-link :to="{name: 'login'}" class="fw-bold text-body">
+        <router-link :to="{ name: 'login' }" class="fw-bold text-body">
           <u>Log In here</u>
         </router-link>
       </p>

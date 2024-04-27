@@ -14,7 +14,7 @@ import { RouterLink } from 'vue-router';
             </a>
           </li>
           <li class="nav-item mb-2">
-            <a href="tel:+34 999 999 99" class="nav-link p-0 text-reset"> +34 999 999 99 </a>
+            <a href="tel:+34 999 99 99 99" class="nav-link p-0 text-reset"> +34 999 99 99 99 </a>
           </li>
         </ul>
       </div>
@@ -23,22 +23,30 @@ import { RouterLink } from 'vue-router';
     <div class="row text-center d-flex justify-content-center py-2">
       <div class="col-md-2">
         <h6 class="text-uppercase font-weight-bold">
-          <router-link :to="{name:'about'}" class="text-reset text-decoration-none">About Us</router-link>
+          <router-link :to="{ name: 'about' }" class="text-reset text-decoration-none"
+            >About Us</router-link
+          >
         </h6>
       </div>
       <div class="col-md-2">
         <h6 class="text-uppercase font-weight-bold">
-          <router-link :to="{name:'legal-conditions'}" class="text-reset text-decoration-none">Legal Conditions</router-link>
+          <router-link :to="{ name: 'legal-conditions' }" class="text-reset text-decoration-none"
+            >Legal Conditions</router-link
+          >
         </h6>
       </div>
       <div class="col-md-2">
         <h6 class="text-uppercase font-weight-bold">
-          <router-link :to="{name:'privacy-policy'}" class="text-reset text-decoration-none">Privacy Policy</router-link>
+          <router-link :to="{ name: 'privacy-policy' }" class="text-reset text-decoration-none"
+            >Privacy Policy</router-link
+          >
         </h6>
       </div>
       <div class="col-md-2">
         <h6 class="text-uppercase font-weight-bold">
-          <router-link :to="{name:'help'}" class="text-reset text-decoration-none">Help</router-link>
+          <router-link :to="{ name: 'help' }" class="text-reset text-decoration-none"
+            >Help</router-link
+          >
         </h6>
       </div>
     </div>

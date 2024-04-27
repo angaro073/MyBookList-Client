@@ -1,7 +1,7 @@
 <script setup>
-import { ref } from "vue";
+import { ref } from 'vue';
 import { RouterLink } from 'vue-router';
-import { useAuthStore } from "@/stores/auth";
+import { useAuthStore } from '@/stores/auth';
 
 const authStore = useAuthStore();
 
@@ -14,10 +14,10 @@ const data = ref({
 });
 
 function checkForm() {
-//
-console.log('Checking the form to login...')
-console.log(authStore.errors);
-//
+  //
+  console.log('Checking the form to login...');
+  console.log(authStore.errors);
+  //
 
   authStore.handleLogin(data.value);
 }
@@ -31,7 +31,7 @@ console.log(authStore.errors);
         class="alert"
         :class="{
           'alert-success': authStore.status >= 200 && authStore.status < 299,
-          'alert-danger': authStore.status >= 400,
+          'alert-danger': authStore.status >= 400
         }"
       >
         {{ authStore.alerts }}
@@ -44,7 +44,7 @@ console.log(authStore.errors);
           v-model="data.email"
           class="form-control"
           :class="{
-            'is-invalid': (authStore.errors && authStore.errors.email) || authStore.status >= 400,
+            'is-invalid': (authStore.errors && authStore.errors.email) || authStore.status >= 400
           }"
           :disabled="authStore.inProcess"
           required
@@ -62,7 +62,7 @@ console.log(authStore.errors);
           v-model="data.password"
           class="form-control"
           :class="{
-            'is-invalid': (authStore.errors && authStore.errors.password) || authStore.status >= 400,
+            'is-invalid': (authStore.errors && authStore.errors.password) || authStore.status >= 400
           }"
           :disabled="authStore.inProcess"
           required
@@ -99,7 +99,7 @@ console.log(authStore.errors);
       <div class="row text-center text-muted mt-5 mb-0">
         <p>
           Not a member?
-          <router-link :to="{name: 'register'}">Sign Up</router-link>
+          <router-link :to="{ name: 'register' }">Sign Up</router-link>
         </p>
       </div>
     </form>
