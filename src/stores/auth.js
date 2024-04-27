@@ -49,16 +49,13 @@ export const useAuthStore = defineStore('auth', {
       this.authAlerts = null;
       this.authErrors = {};
     },
-    // async getToken() {
-    //   await axios.get("/sanctum/csrf-cookie");
-    // },
     getUser() {
       let sessionToken = sessionStorage.getItem('sessionToken');
       if (sessionToken) {
         this.inAuthProcess = true;
-        //
-        console.log('Getting user...');
-        //
+//
+console.log('Getting user...');
+//
         let options = {
           headers: {
             Authorization: `Bearer ${sessionToken}`

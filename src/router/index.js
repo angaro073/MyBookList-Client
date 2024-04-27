@@ -65,12 +65,7 @@ const router = createRouter({
       path: '/legal-conditions',
       name: 'legal-conditions',
       component: () => import('@/views/LegalConditionsView.vue'),
-    },
-    // {
-    //   path: '*',
-    //   name: 'page-not-found',
-    //   component: () => import('@/views/PageNotFoundView.vue'),
-    // }
+    }
   ], 
   sensitive: true,
   strict: true,
