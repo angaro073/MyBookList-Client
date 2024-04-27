@@ -20,7 +20,6 @@ const data = ref({
     </div>
 
     <div class="col-lg-8">
-
       <div class="card mb-3">
         <div class="card-body">
           <div class="row">
@@ -64,14 +63,24 @@ const data = ref({
               placeholder="Password..."
               v-model="data.password"
               :class="{
-                'is-invalid': (authStore.errors && authStore.errors.password) || authStore.status >= 400
+                'is-invalid':
+                  (authStore.errors && authStore.errors.password) || authStore.status >= 400
               }"
               :disabled="authStore.inProcess"
               required
-            >
+            />
             <div class="input-group-append">
-              <button v-if="authStore.inProcess" class="btn btn-outline-danger" type="button" disabled>
-                <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+              <button
+                v-if="authStore.inProcess"
+                class="btn btn-outline-danger"
+                type="button"
+                disabled
+              >
+                <span
+                  class="spinner-border spinner-border-sm"
+                  role="status"
+                  aria-hidden="true"
+                ></span>
                 Loading...
               </button>
               <button v-else type="submit" class="btn btn-outline-danger">Delete</button>
@@ -82,7 +91,6 @@ const data = ref({
           </div>
         </div>
       </form>
-
     </div>
   </div>
 </template>

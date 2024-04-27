@@ -52,9 +52,6 @@ export const useAuthStore = defineStore('auth', {
       let sessionToken = sessionStorage.getItem('sessionToken');
       if (sessionToken) {
         this.inAuthProcess = true;
-//
-console.log('Getting user...');
-//
         let options = {
           headers: {
             Authorization: `Bearer ${sessionToken}`
@@ -73,14 +70,9 @@ console.log('Getting user...');
         );
       } else {
         let rememberToken = this.getCookie('rememberToken');
-        //
-        console.log(rememberToken);
-        //
         if (rememberToken) {
           this.inAuthProcess = true;
-          //
-          console.log('Remembering session...');
-          //
+
           let options = {
             headers: {
               Authorization: `Bearer ${rememberToken}`
@@ -102,9 +94,7 @@ console.log('Getting user...');
     },
     handleLogin(data) {
       this.clear();
-      //
-      console.log('Login...');
-      //
+
       this.inAuthProcess = true;
 
       axios
@@ -116,13 +106,9 @@ console.log('Getting user...');
         .then(
           (response) => {
             this.inAuthProcess = false;
-            //
-            console.log(response);
-            //
+
             this.authStatus = response.status;
-            //
-            console.log(this.authStatus);
-            //
+
             console.log(response.data.rememberToken);
 
             sessionStorage.setItem('sessionToken', response.data.sessionToken);
@@ -132,13 +118,8 @@ console.log('Getting user...');
           },
           (error) => {
             this.inAuthProcess = false;
-            //
-            console.log(error);
-            //
+
             if (error.response) {
-              //
-              console.log('Client error...');
-              //
               this.authStatus = error.response.status;
               if (error.response.status == 422) {
                 this.authAlerts = error.response.data.errors.user;
@@ -148,9 +129,6 @@ console.log('Getting user...');
                 this.authErrors = error.response.data.errors;
               }
             } else {
-              //
-              console.log('Network error...');
-              //
               this.authStatus = 503;
               this.authAlerts = 'Connection refused';
             }
@@ -159,9 +137,7 @@ console.log('Getting user...');
     },
     handleRegister(data) {
       this.clear();
-      //
-      console.log('Registring...');
-      //
+
       this.inAuthProcess = true;
 
       axios
@@ -174,35 +150,17 @@ console.log('Getting user...');
         .then(
           (response) => {
             this.inAuthProcess = false;
-            //
-            console.log(response);
-            //
+
             this.authAlerts = response.data.message;
             this.authStatus = response.status;
-            //
-            console.log(this.alerts);
-            console.log(this.status);
-            //
           },
           (error) => {
-            //
-            console.log(error);
-            //
             this.inAuthProcess = false;
 
             if (error.response) {
-              //
-              console.log('Client error...');
-              //
               this.authStatus = error.response.status;
               this.authErrors = error.response.data.errors;
-              //
-              console.log(this.authErrors);
-              //
             } else {
-              //
-              console.log('Network error...');
-              //
               this.authStatus = 503;
               this.authAlerts = 'Connection refused';
             }
@@ -210,10 +168,8 @@ console.log('Getting user...');
         );
     },
     handleLogout() {
-      //
-      console.log('Logout...');
-      //
       this.clear();
+
       let sessionToken = sessionStorage.getItem('sessionToken');
       if (sessionToken) {
         this.inAuthProcess = true;
@@ -225,9 +181,6 @@ console.log('Getting user...');
         };
         axios.post('/logout', null, options).then(
           (response) => {
-            //
-            console.log(response);
-            //
             this.inAuthProcess = false;
             this.authStatus = response.status;
             this.authAlerts = response.data.message;
@@ -237,21 +190,12 @@ console.log('Getting user...');
             this.authUser = null;
           },
           (error) => {
-            //
-            console.log(error);
-            //
             this.inAuthProcess = false;
 
             if (error.response) {
-              //
-              console.log('Client error...');
-              //
               this.authStatus = error.response.status;
               this.authAlerts = error.response.data.message;
             } else {
-              //
-              console.log('Network error...');
-              //
               this.authStatus = 503;
               this.authAlerts = 'Connection refused';
             }
@@ -259,17 +203,9 @@ console.log('Getting user...');
         );
       }
     },
-    handleSignOut(data){
-
-//
-console.log(data.password);
-//
-
+    handleSignOut(data) {
       let sessionToken = sessionStorage.getItem('sessionToken');
       if (sessionToken && data.password) {
-//
-console.log('Deleting...');
-//
         this.inAuthProcess = true;
 
         let options = {
@@ -277,12 +213,8 @@ console.log('Deleting...');
             Authorization: `Bearer ${sessionToken}`
           }
         };
-        axios.post('/delete-account', {password: data.password}, options)
-        .then(
+        axios.post('/delete-account', { password: data.password }, options).then(
           (response) => {
-//
-console.log(response);
-//
             this.inAuthProcess = false;
             this.authStatus = response.status;
 
@@ -291,21 +223,12 @@ console.log(response);
             this.authUser = null;
           },
           (error) => {
-//
-console.log(error);
-//
             this.inAuthProcess = false;
 
             if (error.response) {
-//
-console.log('Client error...');
-//
               this.authStatus = error.response.status;
               this.authErrors = error.response.data.errors;
             } else {
-//
-console.log('Network error...');
-//
               this.authStatus = 503;
               this.authAlerts = 'Connection refused';
             }

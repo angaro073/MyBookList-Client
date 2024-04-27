@@ -20,13 +20,7 @@ onMounted(() => {
 });
 
 function updateModal() {
-  if (bookId.value && authStore.user.id) {
-    //
-    console.log('Update...');
-    console.log(authStore.user);
-    //
-    collectionStore.get(authStore.user.id, bookId.value);
-  }
+  if (bookId.value && authStore.user.id) collectionStore.get(authStore.user.id, bookId.value);
 }
 
 function saveData() {

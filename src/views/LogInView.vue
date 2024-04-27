@@ -14,11 +14,6 @@ const data = ref({
 });
 
 function checkForm() {
-  //
-  console.log('Checking the form to login...');
-  console.log(authStore.errors);
-  //
-
   authStore.handleLogin(data.value);
 }
 </script>

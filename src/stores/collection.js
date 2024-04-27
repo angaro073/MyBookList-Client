@@ -3,7 +3,7 @@ import axios from 'axios';
 
 export const useCollectionStore = defineStore('collection', {
   state: () => ({
-    collections: ['pending', 'reading', 'completed', 'paused', 'dropped'], // Enum?
+    collections: ['pending', 'reading', 'completed', 'paused', 'dropped'],
     state: 'pending',
     progress: 0,
     score: 0,
@@ -26,11 +26,6 @@ export const useCollectionStore = defineStore('collection', {
       let sessionToken = sessionStorage.getItem('sessionToken');
 
       if (sessionToken) {
-        //
-        console.log(`sessionToken: ${sessionToken}`);
-        console.log(data);
-        console.log('Saving collection data...');
-        //
         data.state = this.state;
         data.progress = this.progress;
         data.score = this.score;
@@ -51,34 +46,20 @@ export const useCollectionStore = defineStore('collection', {
             this.score = response.data.score;
 
             this.processResults = response.data;
-            //
-            console.log(response);
-            //
           },
           (error) => {
             this.inCollectionProcess = false;
-            //
+
             console.log(error);
-            //
           }
         );
       }
     },
     delete(userId, bookId) {
-      //
-      console.log(`userId: ${userId}`);
-      console.log(`bookId: ${bookId}`);
-      //
-
       let sessionToken = sessionStorage.getItem('sessionToken');
-      //
-      console.log(`sessionToken: ${sessionToken}`);
-      //
       if (sessionToken) {
         this.inCollectionProcess = true;
-        //
-        console.log('Deleting data...');
-        //
+
         let options = {
           headers: {
             Authorization: `Bearer ${sessionToken}`
@@ -86,15 +67,12 @@ export const useCollectionStore = defineStore('collection', {
         };
         axios.delete(`/collection/${userId}/${bookId}`, options).then(
           (response) => {
-            //
-            console.log(response);
-            //
             this.inCollectionProcess = false;
-
             this.clear();
           },
           (error) => {
             this.inCollectionProcess = false;
+
             this.clear();
             console.log(error);
           }
@@ -102,20 +80,10 @@ export const useCollectionStore = defineStore('collection', {
       }
     },
     get(userId, bookId) {
-      //
-      console.log(`userId: ${userId}`);
-      console.log(`bookId: ${bookId}`);
-      //
-
       let sessionToken = sessionStorage.getItem('sessionToken');
-      //
-      console.log(`sessionToken: ${sessionToken}`);
-      //
       if (sessionToken) {
         this.inCollectionProcess = true;
-        //
-        console.log('Getting collection registry...');
-        //
+
         let options = {
           headers: {
             Authorization: `Bearer ${sessionToken}`
@@ -123,9 +91,6 @@ export const useCollectionStore = defineStore('collection', {
         };
         axios.get(`/collection/${userId}/${bookId}`, options).then(
           (response) => {
-            //
-            console.log(response);
-            //
             this.inCollectionProcess = false;
 
             this.state = response.data.state;
@@ -143,20 +108,11 @@ export const useCollectionStore = defineStore('collection', {
       }
     },
     getByState(userId, state) {
-      //
-      console.log(`userId: ${userId}`);
-      console.log(`state: ${state}`);
-      //
       let sessionToken = sessionStorage.getItem('sessionToken');
-//
-console.log(`sessionToken: ${sessionToken}`);
-//
       if (sessionToken) {
         this.inCollectionProcess = true;
         this.processResults = null;
-//
-console.log(`Getting collection ${state}...`);
-//
+
         let options = {
           headers: {
             Authorization: `Bearer ${sessionToken}`
@@ -164,9 +120,6 @@ console.log(`Getting collection ${state}...`);
         };
         axios.get(`/collection/${userId}?state=${state}`, options).then(
           (response) => {
-//
-console.log(response);
-//
             this.inCollectionProcess = false;
 
             this.processResults = response.data;

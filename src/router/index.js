@@ -14,27 +14,27 @@ const router = createRouter({
     {
       path: '/login',
       name: 'login',
-      component: () => import('@/views/LogInView.vue'),
+      component: () => import('@/views/LogInView.vue')
     },
     {
       path: '/logout',
       name: 'logout',
-      component: () => import('@/views/LogOutView.vue'),
+      component: () => import('@/views/LogOutView.vue')
     },
     {
       path: '/register',
       name: 'register',
-      component: () => import('@/views/RegisterView.vue'),
+      component: () => import('@/views/RegisterView.vue')
     },
     {
       path: '/profile',
       name: 'profile',
-      component: () => import('@/views/ProfileView.vue'),
+      component: () => import('@/views/ProfileView.vue')
     },
     {
       path: '/collection',
       name: 'collection',
-      component: () => import('@/views/CollectionView.vue'),
+      component: () => import('@/views/CollectionView.vue')
     },
     {
       path: '/library',
@@ -44,50 +44,40 @@ const router = createRouter({
     {
       path: '/library/:bookId',
       name: 'book',
-      component: () => import('@/views/BookView.vue'),
+      component: () => import('@/views/BookView.vue')
     },
     {
       path: '/about',
       name: 'about',
-      component: () => import('@/views/AboutView.vue'),
+      component: () => import('@/views/AboutView.vue')
     },
     {
       path: '/help',
       name: 'help',
-      component: () => import('@/views/HelpView.vue'),
+      component: () => import('@/views/HelpView.vue')
     },
     {
       path: '/privacy-policy',
       name: 'privacy-policy',
-      component: () => import('@/views/PrivacyPolicyView.vue'),
+      component: () => import('@/views/PrivacyPolicyView.vue')
     },
     {
       path: '/legal-conditions',
       name: 'legal-conditions',
-      component: () => import('@/views/LegalConditionsView.vue'),
+      component: () => import('@/views/LegalConditionsView.vue')
     }
-  ], 
+  ],
   sensitive: true,
-  strict: true,
-})
+  strict: true
+});
 
 router.beforeEach((to, from) => {
   let sessionToken = sessionStorage.getItem('sessionToken');
-  if (
-    sessionToken
-    && (
-      to.name == 'login'
-      || to.name == 'register'
-    )
-  ) {
+  if (sessionToken && (to.name == 'login' || to.name == 'register')) {
     return { name: from.name };
   } else if (
-    !sessionToken
-    && (
-      to.name == 'profile'
-      || to.name == 'logout'
-      || to.name == 'collection'
-    )
+    !sessionToken &&
+    (to.name == 'profile' || to.name == 'logout' || to.name == 'collection')
   ) {
     return { name: 'login' };
   }

@@ -25,9 +25,6 @@ export const useLibraryStore = defineStore('library', {
   },
   actions: {
     clearFilters() {
-      //
-      console.log('Clearing data...');
-      //
       this.qKey = '';
       this.authorKey = '';
       this.publisherKey = '';
@@ -36,25 +33,17 @@ export const useLibraryStore = defineStore('library', {
     },
     searchPrevious() {
       this.startIndex = this.startIndex >= this.maxResults ? this.startIndex - this.maxResults : 0;
-      //
-      console.log('Index: ' + this.index);
-      //
       this.search();
     },
     searchNext() {
       this.startIndex += this.maxResults;
-      //
-      console.log('Index: ' + this.index);
-      //
       this.search();
     },
     search() {
       this.searchResults = null;
       if (this.qKey || this.authorKey || this.publisherKey || this.categoryKey) {
         this.inSearchProcess = true;
-        //
-        console.log('Searching...');
-        //
+
         let filters = 'q=';
 
         if (this.qKey) filters += `${this.qKey}`;
@@ -64,15 +53,11 @@ export const useLibraryStore = defineStore('library', {
 
         filters = filters.trim().replace(/ /g, '+');
         filters += `&printType=books&fields=totalItems,items(id,volumeInfo(title,authors,publisher,categories,imageLinks/smallThumbnail))&startIndex=${this.startIndex}&maxResults=${this.maxResults}`;
-        //
-        console.log(filters);
-        //
+
         axios.get(`https://www.googleapis.com/books/v1/volumes?${filters}`).then(
           (response) => {
             this.inSearchProcess = false;
-            //
-            console.log(response.data);
-            //
+
             if (response.data) this.searchResults = response.data;
           },
           (error) => {
@@ -83,9 +68,6 @@ export const useLibraryStore = defineStore('library', {
       }
     },
     getBook(bookId) {
-      //
-      console.log('Getting book...');
-      //
       this.inSearchProcess = true;
       axios
         .get(
@@ -94,9 +76,6 @@ export const useLibraryStore = defineStore('library', {
         .then(
           (response) => {
             this.inSearchProcess = false;
-            //
-            console.log(response);
-            //
             if (response.data) this.searchResults = response.data;
           },
           (error) => {
