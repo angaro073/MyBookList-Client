@@ -67,9 +67,9 @@ const router = createRouter({
       name: 'legal-conditions',
       component: () => import('@/views/LegalConditionsView.vue'),
     }
-  ], 
+  ],
   sensitive: true,
-  strict: true,
-})
+  strict: true
+});
 
 export default router;

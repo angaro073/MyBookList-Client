@@ -1,6 +1,7 @@
 <script setup>
 import HeaderLayout from '@/components/HeaderLayout.vue';
 import FooterLayout from '@/components/FooterLayout.vue';
+
 import AdBanner from './components/AdBanner.vue';
 
 import { RouterView } from 'vue-router';
@@ -10,11 +11,11 @@ import { RouterView } from 'vue-router';
   <HeaderLayout />
 
   <aside>
-    <AdBanner></AdBanner>
+    <AdBanner />
   </aside>
 
   <main class="container-fluid p-5">
-    <router-view/>
+    <router-view />
   </main>
 
   <FooterLayout />

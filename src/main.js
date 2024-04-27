@@ -4,8 +4,8 @@ import 'bootstrap/dist/css/bootstrap.css';
 import { createApp, markRaw } from 'vue';
 import App from '@/App.vue';
 
-import { createPinia } from "pinia";
-import "@/axios.js";
+import { createPinia } from 'pinia';
+import '@/axios.js';
 import router from '@/router/index.js';
 
 const pinia = createPinia();
@@ -23,7 +23,7 @@ app.config.globalProperties.$filters = {
   dateShort(date) {
     return new Date(date).toLocaleDateString();
   }
-}
+};
 
 app.mount('#app');
 
