@@ -71,6 +71,7 @@ watch(
         placeholder="Search..."
         class="form-control"
         autofocus
+        tabindex="1"
         v-model="libraryStore.qKey"
       />
       <div class="input-group-append">

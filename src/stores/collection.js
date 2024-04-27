@@ -148,15 +148,15 @@ export const useCollectionStore = defineStore('collection', {
       console.log(`state: ${state}`);
       //
       let sessionToken = sessionStorage.getItem('sessionToken');
-      //
-      console.log(`sessionToken: ${sessionToken}`);
-      //
+//
+console.log(`sessionToken: ${sessionToken}`);
+//
       if (sessionToken) {
         this.inCollectionProcess = true;
         this.processResults = null;
-        //
-        console.log(`Getting collection ${state}...`);
-        //
+//
+console.log(`Getting collection ${state}...`);
+//
         let options = {
           headers: {
             Authorization: `Bearer ${sessionToken}`
@@ -164,9 +164,9 @@ export const useCollectionStore = defineStore('collection', {
         };
         axios.get(`/collection/${userId}?state=${state}`, options).then(
           (response) => {
-            //
-            console.log(response);
-            //
+//
+console.log(response);
+//
             this.inCollectionProcess = false;
 
             this.processResults = response.data;

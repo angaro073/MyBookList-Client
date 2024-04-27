@@ -12,7 +12,7 @@ const authStore = useAuthStore();
 import { useCollectionStore } from '@/stores/collection';
 const collectionStore = useCollectionStore();
 
-let state = ref(null);
+const state = ref(null);
 
 onBeforeRouteUpdate((to) => {
   if (to.query.state && authStore.user) {
@@ -84,7 +84,7 @@ onBeforeRouteUpdate((to) => {
     <div v-else>
       <div v-if="collectionStore.results">
         <div class="row my-3 align-items-center">
-          <div class="col-auto d-inline">{{ collectionStore.results.totalItems }} results</div>
+          <div class="col-auto d-inline">{{ collectionStore.results.totalItems ?? 0 }} results</div>
         </div>
         <div class="row">
           <ListView :data="collectionStore.results" />

@@ -1,12 +1,12 @@
 <style scoped>
-.toast img {
-  width: 2rem;
-  height: 2rem;
-}
+  .toast img {
+    width: 2rem;
+    height: 2rem;
+  }
 </style>
 
 <template>
-  <div class="toast-container position-fixed bottom-0 end-0 p-3" style="z-index: 1000">
+  <div class="toast-container position-fixed bottom-0 end-0 p-3" style="z-index: 1000000">
     <div
       v-for="(ad, index) in [
         { company: 'Company 1', content: 'Shop Now!' },

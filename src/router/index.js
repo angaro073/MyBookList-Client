@@ -1,20 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router';
 
 import HomeView from '../views/HomeView.vue';
-
-import LogInView from '@/views/LogInView.vue';
-import LogOutView from '@/views/LogOutView.vue';
-import RegisterView from '@/views/RegisterView.vue';
-import ProfileView from '@/views/ProfileView.vue';
-import CollectionView from '@/views/CollectionView.vue';
-
 import LibraryView from '@/views/LibraryView.vue';
-import BookView from '@/views/BookView.vue';
-
-import AboutView from '@/views/AboutView.vue';
-import HelpView from '@/views/HelpView.vue';
-import PrivacyPolicyView from '@/views/PrivacyPolicyView.vue';
-import LegalConditionsView from '@/views/LegalConditionsView.vue';
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -27,34 +14,27 @@ const router = createRouter({
     {
       path: '/login',
       name: 'login',
-      component: LogInView
+      component: () => import('@/views/LogInView.vue'),
     },
     {
       path: '/logout',
       name: 'logout',
-      component: LogOutView
+      component: () => import('@/views/LogOutView.vue'),
     },
     {
       path: '/register',
       name: 'register',
-      component: RegisterView
+      component: () => import('@/views/RegisterView.vue'),
     },
     {
       path: '/profile',
       name: 'profile',
-      component: ProfileView
+      component: () => import('@/views/ProfileView.vue'),
     },
     {
       path: '/collection',
       name: 'collection',
-      component: CollectionView
-      // children: [
-      //   {
-      //     path: ':state',
-      //     name: 'collection-table',
-      //     component: CollectionTableView
-      //   }
-      // ]
+      component: () => import('@/views/CollectionView.vue'),
     },
     {
       path: '/library',
@@ -64,31 +44,58 @@ const router = createRouter({
     {
       path: '/library/:bookId',
       name: 'book',
-      component: BookView
+      component: () => import('@/views/BookView.vue'),
     },
     {
       path: '/about',
       name: 'about',
-      component: AboutView
+      component: () => import('@/views/AboutView.vue'),
     },
     {
       path: '/help',
       name: 'help',
-      component: HelpView
+      component: () => import('@/views/HelpView.vue'),
     },
     {
       path: '/privacy-policy',
       name: 'privacy-policy',
-      component: PrivacyPolicyView
+      component: () => import('@/views/PrivacyPolicyView.vue'),
     },
     {
       path: '/legal-conditions',
       name: 'legal-conditions',
-      component: LegalConditionsView
-    }
-  ],
+      component: () => import('@/views/LegalConditionsView.vue'),
+    },
+    // {
+    //   path: '*',
+    //   name: 'page-not-found',
+    //   component: () => import('@/views/PageNotFoundView.vue'),
+    // }
+  ], 
   sensitive: true,
-  strict: true
+  strict: true,
+})
+
+router.beforeEach((to, from) => {
+  let sessionToken = sessionStorage.getItem('sessionToken');
+  if (
+    sessionToken
+    && (
+      to.name == 'login'
+      || to.name == 'register'
+    )
+  ) {
+    return { name: from.name };
+  } else if (
+    !sessionToken
+    && (
+      to.name == 'profile'
+      || to.name == 'logout'
+      || to.name == 'collection'
+    )
+  ) {
+    return { name: 'login' };
+  }
 });
 
 export default router;

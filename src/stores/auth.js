@@ -71,6 +71,7 @@ export const useAuthStore = defineStore('auth', {
           },
           (error) => {
             this.inAuthProcess = false;
+            sessionStorage.removeItem('sessionToken');
             console.log(error);
           }
         );
