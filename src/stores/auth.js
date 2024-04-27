@@ -1,6 +1,5 @@
 import { defineStore } from 'pinia';
 import axios from 'axios';
-// import { useRouter } from 'vue-router'
 
 export const useAuthStore = defineStore('auth', {
   state: () => ({
@@ -210,7 +209,7 @@ console.log('Getting user...');
           }
         );
     },
-    async handleLogout() {
+    handleLogout() {
       //
       console.log('Logout...');
       //
@@ -253,6 +252,60 @@ console.log('Getting user...');
               //
               console.log('Network error...');
               //
+              this.authStatus = 503;
+              this.authAlerts = 'Connection refused';
+            }
+          }
+        );
+      }
+    },
+    handleSignOut(data){
+
+//
+console.log(data.password);
+//
+
+      let sessionToken = sessionStorage.getItem('sessionToken');
+      if (sessionToken && data.password) {
+//
+console.log('Deleting...');
+//
+        this.inAuthProcess = true;
+
+        let options = {
+          headers: {
+            Authorization: `Bearer ${sessionToken}`
+          }
+        };
+        axios.post('/delete-account', {password: data.password}, options)
+        .then(
+          (response) => {
+//
+console.log(response);
+//
+            this.inAuthProcess = false;
+            this.authStatus = response.status;
+
+            sessionStorage.removeItem('sessionToken');
+            this.removeCookie('rememberToken');
+            this.authUser = null;
+          },
+          (error) => {
+//
+console.log(error);
+//
+            this.inAuthProcess = false;
+
+            if (error.response) {
+//
+console.log('Client error...');
+//
+              this.authStatus = error.response.status;
+              this.authErrors = error.response.data.errors;
+            } else {
+//
+console.log('Network error...');
+//
               this.authStatus = 503;
               this.authAlerts = 'Connection refused';
             }
